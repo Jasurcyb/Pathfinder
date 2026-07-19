@@ -18,6 +18,8 @@ Students worldwide miss out on life-changing opportunities—such as prestigious
 
 PathFinder is built around a collaborative, multi-agent debate society that simulates a human advisory panel. By leveraging different specialized models from the latest Qwen series, we maximize reasoning depth while keeping latency and costs low.
 
+![PathFinder Architecture](public/architecture.png)
+
 ```
                   ┌───────────────────────────────────────────┐
                   │                 User Profile              │
