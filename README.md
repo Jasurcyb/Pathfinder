@@ -126,7 +126,7 @@ This is deployed as a standalone **Custom Runtime Web Function** on Alibaba Clou
 
 ## Deployments and Media
 
-- **Live Demo Link**: *[Add Vercel/Alibaba URL after deployment]*
+- **Live Demo Link**: [https://pathfinderuz.vercel.app](https://pathfinderuz.vercel.app)
 - **Project Walkthrough Video**: *[Add Video Link]*
 
 ### Screenshots
