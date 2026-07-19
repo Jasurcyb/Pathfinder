@@ -1,0 +1,46 @@
+# Next.js / React build artifacts
+node_modules/
+.next/
+out/
+build/
+
+# Production/Staging deployments
+.vercel
+.vercel/
+
+# Environment files
+.env
+.env.local
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Keystore / credentials
+*.pem
+*.key
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+
+# Zip files
+*.zip

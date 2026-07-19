@@ -1,0 +1,21 @@
+{
+  "name": "pathfinder-negotiator-fc",
+  "version": "1.0.0",
+  "description": "PathFinder Negotiator Agent — Alibaba Cloud Function Compute serverless function",
+  "main": "index.js",
+  "scripts": {
+    "test": "node -e \"console.log('Function package loaded')\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "keywords": [
+    "pathfinder",
+    "alibaba-cloud",
+    "function-compute",
+    "qwen",
+    "ai-agent"
+  ],
+  "license": "MIT"
+}
