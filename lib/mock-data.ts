@@ -66,33 +66,32 @@ Best regards,
   },
   {
     id: '3',
-    title: 'AMD Developer Hackathon',
-    organization: 'AMD',
-    category: 'hackathon',
-    deadline: '2026-07-11',
-    matchScore: 92,
+    title: 'OpenAI Open Source Program',
+    organization: 'OpenAI',
+    category: 'grant',
+    deadline: 'Rolling admissions',
+    matchScore: 82,
     description:
-      'Online hackathon focused on developing innovative solutions using AMD technologies. Prize pool $100,000.',
+      'Ongoing program supporting open source AI development, providing API credits and resources for researchers and developers building open source AI tools.',
     requirements:
-      'Team of 2-4 students, basic programming skills, registered student status',
+      'Active open-source contributor, clear project proposal, alignment with OpenAI safety guidelines',
     translatedRequirements:
-      'Команда из 2-4 студентов, базовые навыки программирования, статус зарегистрированного студента',
-    draftApplication: `Hackathon Project Proposal: AI-Powered Network Monitoring
+      'Активный участник проектов с открытым исходным кодом, четкое предложение проекта, соответствие рекомендациям OpenAI по безопасности',
+    draftApplication: `Dear OpenAI Open Source Team,
 
-Team Members: [Names]
+I am writing to propose a project for the OpenAI Open Source Program.
 
-Project Description:
-An AI-driven tool for real-time network security monitoring leveraging AMD's optimized processors.
+Project Title: OpenSource AI Threat Detector
+Description: A developer tool that analyzes pull requests for potential security issues and credential leaks using OpenAI models.
 
-Technologies:
-- AMD ROCm for GPU acceleration
-- PyTorch for ML models
-- Real-time data processing
+Alignment:
+- Zero cost for developers via open source model deployment.
+- High developer utility.
 
-Expected Impact:
-Faster threat detection, reduced false positives, improved network security.
+We request API credits to support our testing and development cycles.
 
-Timeline: Complete MVP in 24 hours, optimize in remaining time.`,
+Best regards,
+[Your Name]`,
     status: 'discovered',
     location: 'Online',
   },
@@ -134,68 +133,57 @@ I am fully committed to completing the program and contributing to the EU cybers
   },
   {
     id: '5',
-    title: 'XPRIZE Competition',
-    organization: 'XPRIZE Foundation',
+    title: 'Google Build with Gemini XPRIZE',
+    organization: 'XPRIZE Foundation / Google',
     category: 'competition',
-    deadline: '2027-06-30',
-    matchScore: 78,
+    deadline: 'Multi-month build window',
+    matchScore: 85,
     description:
-      'Global competition for solving pressing world challenges with focus on AI and sustainability.',
+      'Build real products using Gemini AI across 5 categories: Education, Entrepreneurship, Small Business Services, Financial Access, Professional Services.',
     requirements:
-      'Team registration, project proposal, previous competition experience appreciated',
+      'Registration on XPRIZE portal, prototype built with Gemini API, team submission',
     translatedRequirements:
-      'Регистрация команды, предложение проекта, предыдущий опыт участия в конкурсах приветствуется',
-    draftApplication: `XPRIZE Competition Entry: AI for Climate Resilience
+      'Регистрация на портале XPRIZE, прототип на базе Gemini API, командная заявка',
+    draftApplication: `Google Build with Gemini XPRIZE Project Proposal: EdTech Tutor
 
-Team: [Team Name]
-Members: [Names]
+Project Overview:
+An AI-powered tutor built with Gemini API that adapts to students' learning speed in science.
 
-Challenge: Develop AI solutions to improve climate adaptation in vulnerable regions
-
-Solution Overview:
-Our project uses machine learning to predict climate risks and optimize resource allocation for communities.
-
-Innovation:
-- Novel approach using satellite imagery and IoT sensors
-- Real-time risk assessment
-- Localized adaptation strategies
+Track: Education
+Gemini Integration: Using Gemini Flash for real-time explanations and Gemini Pro for complex grading.
 
 Impact:
-Potential to help 1M+ people in climate-vulnerable areas.`,
+Free, personalized education for students in developing regions.
+
+Timeline: Develop working MVP in 4 weeks, user testing in 2 weeks.`,
     status: 'discovered',
     location: 'Global',
   },
   {
     id: '6',
-    title: 'Qwen Cloud Hackathon',
-    organization: 'Alibaba Cloud',
-    category: 'hackathon',
-    deadline: '2026-07-09',
-    matchScore: 90,
+    title: 'Microsoft AI for Good Lab',
+    organization: 'Microsoft',
+    category: 'grant',
+    deadline: 'Rolling admissions',
+    matchScore: 78,
     description:
-      'Online hackathon for building AI applications using Qwen LLM with cloud computing.',
+      'Ongoing grant and mentorship program for AI projects addressing humanitarian and social good challenges.',
     requirements:
-      'Student status, basic Python knowledge, access to internet',
+      'Project focusing on sustainability, accessibility, humanitarian action, or health, technical viability check',
     translatedRequirements:
-      'Статус студента, базовые знания Python, доступ в интернет',
-    draftApplication: `Qwen Cloud Hackathon Submission: Intelligent Code Review Assistant
+      'Проект, ориентированный на устойчивое развитие, доступность, гуманитарную помощь или здравоохранение, техническая осуществимость',
+    draftApplication: `Microsoft AI for Good Proposal: GreenTech Optimizer
 
-Project: Automated code review tool powered by Qwen LLM
+Concept:
+An AI system powered by Azure Machine Learning to optimize energy usage in public schools.
 
-Features:
-- Security vulnerability detection
-- Code quality analysis
-- Performance optimization suggestions
+Social Good Focus: Sustainability
+We request Microsoft Azure credits and technical mentorship to scale our existing prototype.
 
-Technology Stack:
-- Qwen API
-- Alibaba Cloud computing
-- FastAPI backend
-
-Justification:
-Addresses real developer pain point, leverages latest LLM capabilities efficiently.`,
+Best regards,
+[Your Name]`,
     status: 'matched',
-    location: 'Online',
+    location: 'Global',
   },
   {
     id: '7',
@@ -234,7 +222,7 @@ Upon return, I aim to establish a research center focusing on AI applications fo
     id: '8',
     title: 'Google Summer of Code',
     organization: 'Google',
-    category: 'program',
+    category: 'grant',
     deadline: '2027-03-31',
     matchScore: 82,
     description:
@@ -296,13 +284,13 @@ export const mockAgentMessages: AgentMessage[] = [
   {
     id: '5',
     agent: 'writer',
-    message: 'AMD Hackathon требует меньше языковой сложности, выше вероятность успеха. DAAD и Qwen Cloud также хорошие краткосрочные цели.',
+    message: 'OpenAI Open Source Program требует меньше языковой сложности, выше вероятность успеха. DAAD и Microsoft AI for Good Lab также хорошие краткосрочные цели.',
     timestamp: '2026-07-05T10:15:00Z',
   },
   {
     id: '6',
     agent: 'negotiator',
-    message: 'КОНСЕНСУС: Приоритет - AMD (11 июля, готовность 100%), Qwen (9 июля, готовность 95%). DAAD подготовка параллельно. KAUST отложить на 2027, когда английский B2.',
+    message: 'КОНСЕНСУС: Приоритет - OpenAI Program (готовность 100%), Microsoft Lab (готовность 95%). DAAD подготовка параллельно. KAUST отложить на 2027, когда английский B2.',
     timestamp: '2026-07-05T10:18:00Z',
   },
 ];

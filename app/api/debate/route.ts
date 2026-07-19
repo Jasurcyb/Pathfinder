@@ -27,8 +27,7 @@ function isRateLimited(ip: string, limit = 10, windowMs = 60000): boolean {
 
 export async function POST(request: NextRequest) {
   try {
-    // Basic IP-based rate limiting (10 requests per minute per IP)
-    const ip = request.headers.get('x-forwarded-for') || request.ip || '127.0.0.1';
+    const ip = request.headers.get('x-forwarded-for') || (request as any).ip || '127.0.0.1';
     if (isRateLimited(ip, 10, 60000)) {
       return NextResponse.json(
         { error: 'Too many requests. Please try again in a minute.' },
