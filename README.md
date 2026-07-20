@@ -131,4 +131,15 @@ This is deployed as a standalone **Custom Runtime Web Function** on Alibaba Clou
 
 ### Screenshots
 
-*[Screenshots showing Dashboard, Profile Customization, and Multi-Agent Debate in Action will be added before final submission]*
+#### Dashboard — Opportunity Discovery & Filtering
+![Dashboard](public/screenshot-dashboard.png)
+
+#### Profile — Student Academic Profile
+![Profile](public/screenshot-profile.png)
+
+#### Agent Debate — Multi-Agent Analysis in Action
+![Agent Debate Part 1](public/screenshot-debate-1.png)
+
+#### Agent Debate — Negotiator Final Decision
+![Agent Debate Part 2](public/screenshot-debate-2.png)
+
