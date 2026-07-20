@@ -4,8 +4,16 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { defaultUserProfile } from '@/lib/mock-data';
 import { UserProfile } from '@/types';
+import { useLanguage, type Locale } from '@/lib/language-context';
+
+const LOCALE_LABELS: Record<Locale, string> = {
+  en: 'English',
+  ru: 'Русский',
+  uz: "O'zbek",
+};
 
 export default function ProfilePage() {
+  const { t, locale, setLocale } = useLanguage();
   const [profile, setProfile] = useState<UserProfile>(defaultUserProfile);
   const [isEditing, setIsEditing] = useState(false);
   const [skillInput, setSkillInput] = useState('');
@@ -71,17 +79,33 @@ export default function ProfilePage() {
             PathFinder
           </Link>
           <div className="flex items-center gap-4">
+            {/* Language Switcher */}
+            <div className="flex items-center gap-1 rounded-lg border border-border bg-card px-1 py-0.5">
+              {(Object.keys(LOCALE_LABELS) as Locale[]).map((loc) => (
+                <button
+                  key={loc}
+                  onClick={() => setLocale(loc)}
+                  className={`px-2 py-1 text-xs font-medium rounded transition-colors ${
+                    locale === loc
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-foreground/60 hover:text-foreground'
+                  }`}
+                >
+                  {LOCALE_LABELS[loc]}
+                </button>
+              ))}
+            </div>
             <Link
               href="/"
               className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
             >
-              Панель управления
+              {t('navDashboard')}
             </Link>
             <Link
               href="/agents"
               className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
             >
-              Дебаты
+              {t('navDebate')}
             </Link>
           </div>
         </div>
@@ -91,7 +115,7 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl font-bold text-foreground">Мой профиль</h1>
+            <h1 className="text-3xl font-bold text-foreground">{t('userProfile')}</h1>
             <button
               onClick={() => {
                 if (isEditing) {
@@ -102,10 +126,10 @@ export default function ProfilePage() {
               }}
               className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
             >
-              {isEditing ? 'Сохранить' : 'Редактировать'}
+              {isEditing ? t('saveProfile') : t('editProfile')}
             </button>
           </div>
-          <p className="text-foreground/70">Управляйте информацией о себе для лучшей подборки возможностей</p>
+          <p className="text-foreground/70">{t('profileSubtitle')}</p>
         </div>
 
         {/* Profile Grid */}
@@ -114,10 +138,10 @@ export default function ProfilePage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Personal Information */}
             <div className="p-6 rounded-lg border border-border bg-card">
-              <h2 className="text-xl font-semibold text-foreground mb-4">Личная информация</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t('personalInfo')}</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-foreground/70 mb-1">Имя</label>
+                  <label className="block text-sm font-medium text-foreground/70 mb-1">{t('profileName')}</label>
                   {isEditing ? (
                     <input
                       type="text"
@@ -131,7 +155,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground/70 mb-1">Университет</label>
+                  <label className="block text-sm font-medium text-foreground/70 mb-1">{t('profileUniversity')}</label>
                   {isEditing ? (
                     <input
                       type="text"
@@ -145,7 +169,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground/70 mb-1">Направление обучения</label>
+                  <label className="block text-sm font-medium text-foreground/70 mb-1">{t('profileField')}</label>
                   {isEditing ? (
                     <input
                       type="text"
@@ -159,7 +183,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground/70 mb-1">Год выпуска</label>
+                  <label className="block text-sm font-medium text-foreground/70 mb-1">{t('profileGradYear')}</label>
                   {isEditing ? (
                     <input
                       type="number"
@@ -173,7 +197,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground/70 mb-1">GPA</label>
+                  <label className="block text-sm font-medium text-foreground/70 mb-1">{t('profileGpa')}</label>
                   {isEditing ? (
                     <input
                       type="number"
@@ -191,7 +215,7 @@ export default function ProfilePage() {
 
             {/* English Level */}
             <div className="p-6 rounded-lg border border-border bg-card">
-              <h2 className="text-xl font-semibold text-foreground mb-4">Уровень английского</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t('profileEnglish')}</h2>
               {isEditing ? (
                 <select
                   value={profile.englishLevel}
@@ -209,12 +233,12 @@ export default function ProfilePage() {
                 <div className="flex items-center gap-2">
                   <span className="text-foreground font-medium">{profile.englishLevel}</span>
                   <span className="text-xs text-muted-foreground">
-                    {profile.englishLevel === 'Pre-IELTS' && '(Начинающий)'}
-                    {profile.englishLevel === 'A2' && '(Элементарный)'}
-                    {profile.englishLevel === 'B1' && '(Средний)'}
-                    {profile.englishLevel === 'B2' && '(Выше среднего)'}
-                    {profile.englishLevel === 'C1' && '(Продвинутый)'}
-                    {profile.englishLevel === 'C2' && '(Свободный)'}
+                    {profile.englishLevel === 'Pre-IELTS' && t('levelBeginner')}
+                    {profile.englishLevel === 'A2' && t('levelElementary')}
+                    {profile.englishLevel === 'B1' && t('levelIntermediate')}
+                    {profile.englishLevel === 'B2' && t('levelUpperIntermediate')}
+                    {profile.englishLevel === 'C1' && t('levelAdvanced')}
+                    {profile.englishLevel === 'C2' && t('levelFluent')}
                   </span>
                 </div>
               )}
@@ -222,7 +246,7 @@ export default function ProfilePage() {
 
             {/* Skills */}
             <div className="p-6 rounded-lg border border-border bg-card">
-              <h2 className="text-xl font-semibold text-foreground mb-4">Навыки</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t('profileSkills')}</h2>
               <div className="flex flex-wrap gap-2 mb-4">
                 {profile.skills.map(skill => (
                   <div key={skill} className="px-3 py-1.5 rounded-full bg-primary/20 text-primary text-sm font-medium flex items-center gap-2 border border-primary/30">
@@ -245,7 +269,7 @@ export default function ProfilePage() {
                     value={skillInput}
                     onChange={e => setSkillInput(e.target.value)}
                     onKeyPress={e => e.key === 'Enter' && handleAddSkill()}
-                    placeholder="Добавить навык..."
+                    placeholder={t('enterSkill')}
                     className="flex-1 px-3 py-2 rounded-lg border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary text-sm"
                   />
                   <button
@@ -260,7 +284,7 @@ export default function ProfilePage() {
 
             {/* Interests */}
             <div className="p-6 rounded-lg border border-border bg-card">
-              <h2 className="text-xl font-semibold text-foreground mb-4">Интересы</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t('profileInterests')}</h2>
               <div className="flex flex-wrap gap-2 mb-4">
                 {profile.interests.map(interest => (
                   <div key={interest} className="px-3 py-1.5 rounded-full bg-accent/20 text-accent text-sm font-medium flex items-center gap-2 border border-accent/30">
@@ -283,7 +307,7 @@ export default function ProfilePage() {
                     value={interestInput}
                     onChange={e => setInterestInput(e.target.value)}
                     onKeyPress={e => e.key === 'Enter' && handleAddInterest()}
-                    placeholder="Добавить интерес..."
+                    placeholder={t('enterInterest')}
                     className="flex-1 px-3 py-2 rounded-lg border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary text-sm"
                   />
                   <button
@@ -301,38 +325,38 @@ export default function ProfilePage() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-4">
               <div className="p-4 rounded-lg border border-border bg-card">
-                <h3 className="font-semibold text-foreground mb-3">Резюме профиля</h3>
+                <h3 className="font-semibold text-foreground mb-3">{t('profileSummary')}</h3>
                 <div className="space-y-2 text-sm">
                   <div>
-                    <span className="text-muted-foreground">Полное имя:</span>
+                    <span className="text-muted-foreground">{t('fullName')}</span>
                     <p className="text-foreground font-medium">{profile.name}</p>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">GPA:</span>
+                    <span className="text-muted-foreground">{t('gpaLabel')}</span>
                     <p className="text-foreground font-medium">{profile.gpa.toFixed(2)} / 4.0</p>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Английский:</span>
+                    <span className="text-muted-foreground">{t('englishLabel')}</span>
                     <p className="text-foreground font-medium">{profile.englishLevel}</p>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Навыков:</span>
+                    <span className="text-muted-foreground">{t('skillsCount')}</span>
                     <p className="text-foreground font-medium">{profile.skills.length}</p>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Интересов:</span>
+                    <span className="text-muted-foreground">{t('interestsCount')}</span>
                     <p className="text-foreground font-medium">{profile.interests.length}</p>
                   </div>
                 </div>
               </div>
 
               <div className="p-4 rounded-lg border border-border bg-card">
-                <h3 className="font-semibold text-foreground mb-3">Советы</h3>
+                <h3 className="font-semibold text-foreground mb-3">{t('tips')}</h3>
                 <ul className="space-y-2 text-xs text-foreground/70">
-                  <li>• Добавьте больше навыков для лучшей подборки</li>
-                  <li>• Укажите ваши интересы для целевого поиска</li>
-                  <li>• Обновляйте GPA при улучшении</li>
-                  <li>• Уровень английского влияет на рекомендации</li>
+                  <li>• {t('tip1')}</li>
+                  <li>• {t('tip2')}</li>
+                  <li>• {t('tip3')}</li>
+                  <li>• {t('tip4')}</li>
                 </ul>
               </div>
             </div>

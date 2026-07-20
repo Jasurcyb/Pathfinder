@@ -47,7 +47,7 @@ export default function AgentsPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [selectedOpportunityId, setSelectedOpportunityId] = useState(mockOpportunities[0].id);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { locale, setLocale } = useLanguage();
+  const { locale, setLocale, t } = useLanguage();
 
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -108,7 +108,7 @@ export default function AgentsPage() {
         {
           id: `error-${Date.now()}`,
           agent: 'negotiator',
-          message: `Ошибка при запуске дебатов: ${errorMsg}. Пожалуйста, проверьте, что установлена переменная окружения QWEN_API_KEY.`,
+          message: t('errorDebate').replace('{error}', errorMsg),
           timestamp: new Date().toISOString(),
         },
       ]);
@@ -145,13 +145,13 @@ export default function AgentsPage() {
               href="/"
               className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
             >
-              Панель управления
+              {t('navDashboard')}
             </Link>
             <Link
               href="/profile"
               className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
             >
-              Профиль
+              {t('navProfile')}
             </Link>
           </div>
         </div>
@@ -163,15 +163,15 @@ export default function AgentsPage() {
           {/* Main Debate Area */}
           <div className="lg:col-span-2">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold text-foreground mb-2">Дебаты агентов</h1>
+              <h1 className="text-3xl font-bold text-foreground mb-2">{t('agentDebateTitle')}</h1>
               <p className="text-foreground/70 mb-4">
-                Посмотрите, как AI-агенты общаются, обсуждают и принимают консенсус по вашим возможностям
+                {t('agentDebateSubtitle')}
               </p>
 
               {/* Opportunity Selector */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Выберите возможность для анализа:
+                  {t('selectOppAnalysis')}
                 </label>
                 <select
                   value={selectedOpportunityId}
@@ -196,7 +196,7 @@ export default function AgentsPage() {
               {messages.length === 0 && !isRunning && (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center">
-                    <p className="text-muted-foreground mb-4">Нажмите кнопку ниже, чтобы запустить анализ</p>
+                    <p className="text-muted-foreground mb-4">{t('clickToStart')}</p>
                   </div>
                 </div>
               )}
@@ -209,7 +209,7 @@ export default function AgentsPage() {
                       <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                       <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
-                    <p className="text-muted-foreground">Агенты думают...</p>
+                    <p className="text-muted-foreground">{t('agentsThinking')}</p>
                   </div>
                 </div>
               )}
@@ -233,7 +233,7 @@ export default function AgentsPage() {
               disabled={isRunning}
               className="w-full px-4 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
-              {isRunning ? 'Анализ в процессе...' : 'Запустить новый анализ'}
+              {isRunning ? t('analysisInProgress') : t('runAnalysis')}
             </button>
           </div>
 
@@ -241,13 +241,13 @@ export default function AgentsPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-4">
               <div className="p-4 rounded-lg border border-border bg-card">
-                <h3 className="font-semibold text-foreground mb-4">Агенты дебатов</h3>
+                <h3 className="font-semibold text-foreground mb-4">{t('debateAgents')}</h3>
                 <div className="space-y-3">
                   {[
-                    { agent: 'scout', label: 'Scout Agent', model: 'qwen3.6-flash', desc: 'Ищет актуальную информацию', color: 'bg-blue-500/20 border-blue-500/30' },
-                    { agent: 'matcher', label: 'Matcher Agent', model: 'qwen3.6-plus', desc: 'Оценивает соответствие профилю', color: 'bg-green-500/20 border-green-500/30' },
-                    { agent: 'writer', label: 'Writer Agent', model: 'qwen3.6-flash', desc: 'Оценивает требуемые усилия', color: 'bg-orange-500/20 border-orange-500/30' },
-                    { agent: 'negotiator', label: 'Negotiator Agent', model: 'qwen3.7-max', desc: 'Принимает финальное решение', color: 'bg-red-500/20 border-red-500/30' },
+                    { agent: 'scout', label: 'Scout Agent', model: 'qwen3.6-flash', desc: t('scoutDesc'), color: 'bg-blue-500/20 border-blue-500/30' },
+                    { agent: 'matcher', label: 'Matcher Agent', model: 'qwen3.6-plus', desc: t('matcherDesc'), color: 'bg-green-500/20 border-green-500/30' },
+                    { agent: 'writer', label: 'Writer Agent', model: 'qwen3.6-flash', desc: t('writerDesc'), color: 'bg-orange-500/20 border-orange-500/30' },
+                    { agent: 'negotiator', label: 'Negotiator Agent', model: 'qwen3.7-max', desc: t('negotiatorDesc'), color: 'bg-red-500/20 border-red-500/30' },
                   ].map(item => (
                     <div key={item.agent} className={`p-3 rounded border ${item.color}`}>
                       <h4 className="font-medium text-sm text-foreground">{item.label}</h4>
@@ -259,27 +259,27 @@ export default function AgentsPage() {
               </div>
 
               <div className="p-4 rounded-lg border border-border bg-card">
-                <h3 className="font-semibold text-foreground mb-3">Протокол дебатов</h3>
+                <h3 className="font-semibold text-foreground mb-3">{t('debateProtocol')}</h3>
                 <ol className="space-y-2 text-sm text-foreground/70">
                   <li className="flex gap-2">
                     <span className="flex-shrink-0 font-bold text-primary">1.</span>
-                    <span>Scout проверяет актуальную информацию</span>
+                    <span>{t('step1')}</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="flex-shrink-0 font-bold text-primary">2.</span>
-                    <span>Matcher и Writer предлагают оценки</span>
+                    <span>{t('step2')}</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="flex-shrink-0 font-bold text-primary">3.</span>
-                    <span>Агенты обсуждают позиции друг друга</span>
+                    <span>{t('step3')}</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="flex-shrink-0 font-bold text-primary">4.</span>
-                    <span>Агенты пересматривают и голосуют</span>
+                    <span>{t('step4')}</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="flex-shrink-0 font-bold text-primary">5.</span>
-                    <span>Negotiator выносит финальное решение</span>
+                    <span>{t('step5')}</span>
                   </li>
                 </ol>
               </div>

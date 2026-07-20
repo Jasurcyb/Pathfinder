@@ -5,25 +5,13 @@ import Link from 'next/link';
 import { getOpportunityById, defaultUserProfile } from '@/lib/mock-data';
 import { MatchScoreBadge } from '@/components/MatchScoreBadge';
 import { UserProfile } from '@/types';
+import { useLanguage, type Locale } from '@/lib/language-context';
 
-const categoryLabels: Record<string, string> = {
-  grant: 'Грант',
-  hackathon: 'Хакатон',
-  scholarship: 'Стипендия',
-  research: 'Исследование',
-  competition: 'Конкурс',
+const localeMap: Record<string, string> = {
+  en: 'en-US',
+  ru: 'ru-RU',
+  uz: 'uz-UZ',
 };
-
-function getDaysUntilDeadline(deadline: string): string {
-  const now = new Date();
-  const deadlineDate = new Date(deadline);
-  const days = Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-
-  if (days < 0) return 'Истекло';
-  if (days === 0) return 'Сегодня';
-  if (days === 1) return 'Завтра';
-  return `${days} дн.`;
-}
 
 export default function OpportunityDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -31,6 +19,29 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
   const [draftApplication, setDraftApplication] = useState(opportunity?.draftApplication || '');
   const [showRequirements, setShowRequirements] = useState(false);
   const [profile, setProfile] = useState<UserProfile>(defaultUserProfile);
+  const { t, locale } = useLanguage();
+
+  const getCategoryLabel = (cat: string) => {
+    const map: Record<string, string> = {
+      grant: 'catGrant',
+      hackathon: 'catHackathon',
+      scholarship: 'catScholarship',
+      research: 'catResearchSingular',
+      competition: 'catCompetition',
+    };
+    return map[cat] ? t(map[cat] as any) : cat;
+  };
+
+  const getDaysUntilDeadline = (deadline: string): string => {
+    const now = new Date();
+    const deadlineDate = new Date(deadline);
+    const days = Math.ceil((deadlineDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (days < 0) return t('expired');
+    if (days === 0) return t('today');
+    if (days === 1) return t('tomorrow');
+    return `${days} ${t('daysLeftSuffix')}`;
+  };
 
   useEffect(() => {
     const saved = localStorage.getItem('userProfile');
@@ -55,15 +66,15 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
               href="/"
               className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
             >
-              Назад на панель
+              {t('navBack')}
             </Link>
           </div>
         </nav>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Возможность не найдена</h1>
-          <p className="text-foreground/70 mb-4">Возможность с ID {id} не существует</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">{t('oppNotFound')}</h1>
+          <p className="text-foreground/70 mb-4">{t('oppNotFoundDesc').replace('{id}', id)}</p>
           <Link href="/" className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90">
-            Вернуться на панель
+            {t('goBack')}
           </Link>
         </div>
       </main>
@@ -72,7 +83,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
 
   const daysUntil = getDaysUntilDeadline(opportunity.deadline);
   const isExpired = new Date(opportunity.deadline) < new Date();
-  const deadlineDate = new Date(opportunity.deadline).toLocaleDateString('ru-RU', {
+  const deadlineDate = new Date(opportunity.deadline).toLocaleDateString(localeMap[locale] || 'en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -94,7 +105,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
             href="/"
             className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
           >
-            ← Назад на панель
+            ← {t('navBack')}
           </Link>
         </div>
       </nav>
@@ -110,7 +121,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="px-3 py-1 rounded text-xs font-medium bg-primary/20 text-primary border border-primary/30">
-                      {categoryLabels[opportunity.category]}
+                      {getCategoryLabel(opportunity.category)}
                     </span>
                     <span className={`px-3 py-1 rounded text-xs font-semibold ${isExpired ? 'text-red-400 bg-red-500/10' : 'text-amber-400 bg-amber-500/10'}`}>
                       {daysUntil}
@@ -126,18 +137,18 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
             {/* Key Information */}
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-lg border border-border bg-card">
-                <div className="text-sm text-muted-foreground mb-1">Крайний срок</div>
+                <div className="text-sm text-muted-foreground mb-1">{t('deadlineLabel')}</div>
                 <div className="text-lg font-semibold text-foreground">{deadlineDate}</div>
               </div>
               <div className="p-4 rounded-lg border border-border bg-card">
-                <div className="text-sm text-muted-foreground mb-1">Локация</div>
+                <div className="text-sm text-muted-foreground mb-1">{t('locationLabel')}</div>
                 <div className="text-lg font-semibold text-foreground">📍 {opportunity.location}</div>
               </div>
             </div>
 
             {/* Description */}
             <div className="p-6 rounded-lg border border-border bg-card">
-              <h2 className="text-xl font-semibold text-foreground mb-3">Описание</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-3">{t('description')}</h2>
               <p className="text-foreground/80 leading-relaxed">{opportunity.description}</p>
             </div>
 
@@ -147,7 +158,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
                 onClick={() => setShowRequirements(!showRequirements)}
                 className="w-full flex items-center justify-between font-semibold text-foreground hover:text-primary transition-colors"
               >
-                <h2 className="text-xl">Оригинальные требования (английский)</h2>
+                <h2 className="text-xl">{t('originalRequirements')}</h2>
                 <span className="text-xl">{showRequirements ? '−' : '+'}</span>
               </button>
               {showRequirements && (
@@ -161,35 +172,35 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
             <div className="p-6 rounded-lg border border-border bg-card">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-lg">🔤</span>
-                <h2 className="text-xl font-semibold text-foreground">Упрощенное объяснение на русском</h2>
+                <h2 className="text-xl font-semibold text-foreground">{t('simplifiedExplanation')}</h2>
               </div>
               <p className="text-foreground/80 leading-relaxed">{opportunity.translatedRequirements}</p>
             </div>
 
             {/* Match Score Breakdown */}
             <div className="p-6 rounded-lg border border-border bg-card">
-              <h2 className="text-xl font-semibold text-foreground mb-4">Почему эта оценка совпадения?</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-4">{t('whyThisScore')}</h2>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <span className="text-green-400 font-bold mt-1">✓</span>
                   <div>
-                    <p className="font-medium text-foreground">Сильное совпадение навыков</p>
-                    <p className="text-sm text-foreground/70">Ваши навыки в {profile.skills.slice(0, 2).join(', ')} отлично соответствуют требованиям</p>
+                    <p className="font-medium text-foreground">{t('strongSkillMatch')}</p>
+                    <p className="text-sm text-foreground/70">{t('skillsMatchDesc').replace('{skills}', profile.skills.slice(0, 2).join(', '))}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-green-400 font-bold mt-1">✓</span>
                   <div>
-                    <p className="font-medium text-foreground">Отличный GPA</p>
-                    <p className="text-sm text-foreground/70">Ваш GPA {profile.gpa} выше среднего требуемого</p>
+                    <p className="font-medium text-foreground">{t('greatGpa')}</p>
+                    <p className="text-sm text-foreground/70">{t('gpaMatchDesc').replace('{gpa}', String(profile.gpa))}</p>
                   </div>
                 </div>
                 {opportunity.matchScore < 80 && (
                   <div className="flex items-start gap-3">
                     <span className="text-amber-400 font-bold mt-1">!</span>
                     <div>
-                      <p className="font-medium text-foreground">Требования к английскому</p>
-                      <p className="text-sm text-foreground/70">Уровень {profile.englishLevel} ниже требуемого. Рассмотрите подготовку.</p>
+                      <p className="font-medium text-foreground">{t('englishRequirement')}</p>
+                      <p className="text-sm text-foreground/70">{t('englishWarningDesc').replace('{level}', profile.englishLevel)}</p>
                     </div>
                   </div>
                 )}
@@ -201,23 +212,23 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">✍</span>
-                  <h2 className="text-xl font-semibold text-foreground">Черновик заявления</h2>
+                  <h2 className="text-xl font-semibold text-foreground">{t('draftApplication')}</h2>
                 </div>
                 <button
                   onClick={handleRegenerateDraft}
                   className="text-sm text-primary hover:text-primary/80 font-medium transition-colors"
                 >
-                  Переделать
+                  {t('regenerate')}
                 </button>
               </div>
               <textarea
                 value={draftApplication}
                 onChange={e => setDraftApplication(e.target.value)}
                 className="w-full h-48 p-4 rounded-lg border border-border bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary resize-none"
-                placeholder="Ваше заявление появится здесь..."
+                placeholder={t('draftPlaceholder')}
               />
               <p className="text-xs text-muted-foreground mt-2">
-                Это предварительный черновик, созданный AI. Отредактируйте его под себя перед подачей.
+                {t('draftDisclaimer')}
               </p>
             </div>
 
@@ -227,13 +238,13 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
                 href="#"
                 className="flex-1 px-4 py-3 rounded-lg bg-primary text-primary-foreground font-semibold text-center hover:bg-primary/90 transition-colors"
               >
-                Отправить заявление
+                {t('submitApplication')}
               </a>
               <button
                 onClick={() => setDraftApplication('')}
                 className="px-4 py-3 rounded-lg border border-border text-foreground font-semibold hover:bg-card/50 transition-colors"
               >
-                Очистить
+                {t('clearDraft')}
               </button>
             </div>
           </div>
@@ -243,35 +254,35 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
             <div className="sticky top-24 space-y-4">
               {/* Quick Stats */}
               <div className="p-4 rounded-lg border border-border bg-card">
-                <h3 className="font-semibold text-foreground mb-4">Быстрая информация</h3>
+                <h3 className="font-semibold text-foreground mb-4">{t('quickInfo')}</h3>
                 <div className="space-y-3 text-sm">
                   <div>
-                    <span className="text-muted-foreground">Статус</span>
+                    <span className="text-muted-foreground">{t('status')}</span>
                     <p className="text-foreground font-medium capitalize">
-                      {opportunity.status === 'discovered' && '🔍 Обнаружено'}
-                      {opportunity.status === 'matched' && '✓ Совпадает'}
-                      {opportunity.status === 'drafted' && '✍ Черновик'}
-                      {opportunity.status === 'applied' && '📤 Подано'}
+                      {opportunity.status === 'discovered' && `🔍 ${t('statusDiscovered')}`}
+                      {opportunity.status === 'matched' && `✓ ${t('statusMatched')}`}
+                      {opportunity.status === 'drafted' && `✍ ${t('statusDrafted')}`}
+                      {opportunity.status === 'applied' && `📤 ${t('statusApplied')}`}
                     </p>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Совпадение</span>
+                    <span className="text-muted-foreground">{t('match')}</span>
                     <p className="text-foreground font-medium">{opportunity.matchScore}%</p>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Тип</span>
-                    <p className="text-foreground font-medium">{categoryLabels[opportunity.category]}</p>
+                    <span className="text-muted-foreground">{t('type')}</span>
+                    <p className="text-foreground font-medium">{getCategoryLabel(opportunity.category)}</p>
                   </div>
                 </div>
               </div>
 
               {/* Requirements Checklist */}
               <div className="p-4 rounded-lg border border-border bg-card">
-                <h3 className="font-semibold text-foreground mb-3">Требования</h3>
+                <h3 className="font-semibold text-foreground mb-3">{t('requirementsChecklist')}</h3>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
                     <span className="text-green-400">✓</span>
-                    <span className="text-foreground/80">Бакалавр</span>
+                    <span className="text-foreground/80">{t('bachelor')}</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <span className={profile.gpa >= 3.5 ? 'text-green-400' : 'text-amber-400'}>
@@ -283,7 +294,7 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
                     <span className={['B2', 'C1', 'C2'].includes(profile.englishLevel) ? 'text-green-400' : 'text-amber-400'}>
                       {['B2', 'C1', 'C2'].includes(profile.englishLevel) ? '✓' : '!'}
                     </span>
-                    <span className="text-foreground/80">Английский {profile.englishLevel}</span>
+                    <span className="text-foreground/80">{t('english')} {profile.englishLevel}</span>
                   </li>
                 </ul>
               </div>
@@ -293,11 +304,11 @@ export default function OpportunityDetailPage({ params }: { params: Promise<{ id
                 <div className="flex items-start gap-2">
                   <span className="text-lg">🤖</span>
                   <div>
-                    <h4 className="font-semibold text-foreground text-sm mb-1">Совет от агентов</h4>
+                    <h4 className="font-semibold text-foreground text-sm mb-1">{t('agentTip')}</h4>
                     <p className="text-xs text-foreground/70">
                       {opportunity.matchScore >= 80
-                        ? 'Высокий приоритет! Подайте заявление как можно скорее.'
-                        : 'Хорошая возможность, но требуется подготовка. Рассмотрите другие варианты в первую очередь.'}
+                        ? t('highPriority')
+                        : t('goodOpportunity')}
                     </p>
                   </div>
                 </div>
